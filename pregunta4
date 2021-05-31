@@ -1,0 +1,72 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Sun May 30 23:35:21 2021
+
+@author: sebas
+"""
+
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
+
+
+dataset=pd.read_csv("audit_risk.csv")
+
+print( dataset.head())
+
+print("columnas dataset")
+print(dataset.columns)
+
+#preprocesamiento
+
+print("Preprocesamiento")
+
+print(dataset.info(verbose=True,null_counts=True))
+
+dataset=dataset.replace(np.nan,"0")
+print(dataset.info(verbose=True,null_counts=True))
+
+#Red neuronal
+
+X=dataset.loc[:,['TOTAL','numbers','Money_Value','PROB','CONTROL_RISK']]
+Y=dataset["LOCATION_ID"]
+
+print("verificando valores unicos de la tablas")
+print(Y.unique())
+
+
+Y=Y.replace({"LOHARU":'0',"NUH":'0',"SAFIDON":'0'})
+
+print("verificando valores unicos de la tablas")
+print(Y.unique())
+
+
+#modelo de entrenamiento y prueba
+#X_test con 80 % de entrenamiento
+from sklearn.model_selection import train_test_split
+X_train,X_test,y_train,y_test=train_test_split(X,Y,test_size=0.20)
+
+
+from sklearn.preprocessing import StandardScaler
+escalaX=StandardScaler()
+
+X_train=escalaX.fit_transform(X_train)
+X_test=escalaX.transform(X_test)
+
+
+#entrenamiento y predicciones de la red neuronal
+from sklearn.neural_network import MLPClassifier
+mlp=MLPClassifier(hidden_layer_sizes=(10,10,10),max_iter=1000)
+mlp.fit(X_train,y_train)
+prediccion=mlp.predict(X_test)
+
+#evaluacion del algoritmo
+from sklearn.metrics import confusion_matrix
+print("matriz de confusion")
+print(confusion_matrix(y_test,prediccion))
+from sklearn.metrics import classification_report
+print("_______________________________________________________")
+print("reporte de clasificacion")
+print(classification_report(y_test,prediccion))
