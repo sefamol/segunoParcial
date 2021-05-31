@@ -24,9 +24,6 @@ from deap import tools
 datos=pd.read_csv('datos2.csv',sep=';',header=0)
 
 
-#distancia =datos["peso"]
-#poblacion=len(datos.axes[0])
-
 datos.columns=["A","B","C","D","E"]
 matriz=datos[["A","B","C","D","E"]]
 matriz=np.array(matriz)
