@@ -1,0 +1,95 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Sun May 30 21:52:18 2021
+
+@author: sebas
+"""
+
+#importando librerias
+import pandas as pd
+#network para grafos
+import networkx as nx
+
+
+#lectura de datos
+ruta=pd.read_csv('datos.csv',sep=';',header=0)
+#impresion de datos
+print(ruta)
+
+a=[]
+filas_conteo=len(ruta.axes[0])
+print(filas_conteo)
+
+
+vector_distancia=[]
+vector_destino=[]
+peso_total=100
+dato_menor=""
+a=1
+i=0
+dato=""
+peso=0
+if a==1:
+    vector_destino.append(ruta.iloc[i]["origen"])
+    a=2
+    i=1
+    for j in range(filas_conteo):
+        if vector_destino[i-1] == ruta.iloc[j]["origen"]:
+            dato=ruta.iloc[j]["destino"]
+            peso=ruta.iloc[j]["peso"]
+        if peso_total > peso:
+            peso_total=peso
+            dato_menor=dato
+    vector_destino.append(dato_menor)
+    i=2
+peso_total=100
+peso=100
+for j in range(filas_conteo):
+        if vector_destino[i-2]!=ruta.iloc[j]["origen"]:
+            if vector_destino[i-1] == ruta.iloc[j]["origen"] and vector_destino[i-2]!=ruta.iloc[j]["destino"] :
+                dato=ruta.iloc[j]["destino"]
+                peso=ruta.iloc[j]["peso"]
+        if peso_total > peso:
+            peso_total=peso
+            dato_menor=dato
+vector_destino.append(dato_menor)
+i=3
+peso_total=100
+peso=100
+for j in range(filas_conteo):
+        if vector_destino[i-3]!=ruta.iloc[j]["origen"] and vector_destino[i-2]!=ruta.iloc[j]["origen"] :
+            if vector_destino[i-1]==ruta.iloc[j]["origen"] :
+                if vector_destino[i-3]!=ruta.iloc[j]["destino"] and vector_destino[i-2]!=ruta.iloc[j]["destino"] and vector_destino[i-1]!=ruta.iloc[j]["destino"]:
+                    dato=ruta.iloc[j]["destino"]
+                    peso=ruta.iloc[j]["peso"]
+                    
+            
+            if peso_total > peso:
+                peso_total=peso
+                dato_menor=dato
+            
+vector_destino.append(dato_menor)
+i=4
+peso_total=100
+peso=100                   
+for j in range(filas_conteo):
+        if vector_destino[i-4]!=ruta.iloc[j]["origen"] and vector_destino[i-3]!=ruta.iloc[j]["origen"] and vector_destino[i-2]!=ruta.iloc[j]["origen"] :
+            if vector_destino[i-1]==ruta.iloc[j]["origen"] :
+                if vector_destino[i-4]!=ruta.iloc[j]["destino"] and vector_destino[i-3]!=ruta.iloc[j]["destino"] and vector_destino[i-2]!=ruta.iloc[j]["destino"] and vector_destino[i-1]!=ruta.iloc[j]["destino"]:
+                    dato=ruta.iloc[j]["destino"]
+                    peso=ruta.iloc[j]["peso"]
+                    
+           
+            if peso_total > peso:
+                peso_total=peso
+                dato_menor=dato     
+vector_destino.append(dato_menor)           
+
+print("cantidad de destinos")
+print(len( vector_destino ))
+print("la ruta mas corta es :")
+
+for i in vector_destino:
+    a.append(i)
+print (a)
