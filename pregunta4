@@ -67,6 +67,6 @@ from sklearn.metrics import confusion_matrix
 print("matriz de confusion")
 print(confusion_matrix(y_test,prediccion))
 from sklearn.metrics import classification_report
-print("_______________________________________________________")
-print("reporte de clasificacion")
+
+print("clasificacion")
 print(classification_report(y_test,prediccion))
